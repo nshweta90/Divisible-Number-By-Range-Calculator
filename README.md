@@ -42,13 +42,15 @@ APIs:
 -
 Setting Upper Limit[POST]  - This is used to configure the Upper limit of the number range
                              Run with below:
-                                curl -X POST http://localhost:8080/setupperlimit/15
+                                
+	    curl -X POST http://localhost:8080/setupperlimit/15
 
 Calculating Number [GET]-  Provides the resultant divisible number based on the limit set by previous API
                            output can be fetched as JSON or XML by providing Accept header 
                            Run with below:
                            
-       curl -X GET http://localhost:8080/getdivisiblenumber -H "Accept: application/json"  							 		
+       curl -X GET http://localhost:8080/getdivisiblenumber -H "Accept: application/json" 
+        							 		
        sample output: 
        {
          "message":"360360 is the smallest number that can be divided by 1 to 15",

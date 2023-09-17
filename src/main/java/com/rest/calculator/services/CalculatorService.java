@@ -17,16 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class CalculatorService {
 
-	private static final String MILLISECONDS = " Milliseconds";
 
-	private static final String UPPER_LIMIT_IS_NOT_SET = "Upper Limit is Not set.Please set limit and then try again!";
-
-	private static final String PLEASE_ENTER_VALID_INTEGER = "Please set valid Integer value for UpperLimit between 1 to 100";
-
-	private static final String UPPER_LIMIT = "upperLimit";
-
-	private static final String SMALLEST_NUMBER_THAT_CAN_BE_DIVIDED_BY_RANGE = "%s is the smallest number that can be divided by 1 to %s";
-
+	
 	@Autowired
 	ServletContext context;
 
@@ -39,15 +31,15 @@ public class CalculatorService {
 	 */
 	public void configureLimit(Integer limit) throws InvalitlimitException {
 		if (isValidLimit(limit)) {
-			context.setAttribute(UPPER_LIMIT, limit);
-			log.debug("CalculatorService.configureLimit : " + (int)context.getAttribute(UPPER_LIMIT));
+			context.setAttribute(Constants.UPPER_LIMIT, limit);
+			log.debug("CalculatorService.configureLimit : " + (int)context.getAttribute(Constants.UPPER_LIMIT));
 		} else {
-			throw new InvalitlimitException( PLEASE_ENTER_VALID_INTEGER);
+			throw new InvalitlimitException( String.format(Constants.PLEASE_ENTER_VALID_INTEGER, Constants.RANGE_LIMIT));
 		}		
 	}
 
 	private boolean isValidLimit(Integer limit) {
-		return (limit != null && limit > 0 && limit < 100);
+		return (limit != null && limit > 0 && limit < Constants.RANGE_LIMIT);
 	}
 	  
 
@@ -63,20 +55,20 @@ public class CalculatorService {
 	public CalculationResult calculateNumbersAndRange() throws  LimitNotSetException{
 		long start = System.currentTimeMillis();
 
-	    if(context.getAttribute(UPPER_LIMIT) == null && !(context.getAttribute(UPPER_LIMIT) instanceof Integer))
-	    	 throw new LimitNotSetException(UPPER_LIMIT_IS_NOT_SET);
+	    if(context.getAttribute(Constants.UPPER_LIMIT) == null && !(context.getAttribute(Constants.UPPER_LIMIT) instanceof Integer))
+	    	 throw new LimitNotSetException(Constants.UPPER_LIMIT_IS_NOT_SET);
 	    	
 	   
-	    int limit =(int) context.getAttribute(UPPER_LIMIT);
+	    int limit =(int) context.getAttribute(Constants.UPPER_LIMIT);
 
 		Map<Integer, Integer> factorsMap = initializePrimeFactorsMap(limit);
 		Integer result = getNumberDivisibleByGivenRange(factorsMap); 
 		
 		long calculationTime = System.currentTimeMillis() - start;
-		log.debug("Took time : " + calculationTime + MILLISECONDS); 
+		log.debug("Took time : " + calculationTime + Constants.MILLISECONDS); 
 	    	 
-		return new CalculationResult(String.format(SMALLEST_NUMBER_THAT_CAN_BE_DIVIDED_BY_RANGE, result,
-				context.getAttribute(UPPER_LIMIT)), (calculationTime + MILLISECONDS));
+		return new CalculationResult(String.format(Constants.SMALLEST_NUMBER_THAT_CAN_BE_DIVIDED_BY_RANGE, result,
+				context.getAttribute(Constants.UPPER_LIMIT)), (calculationTime + Constants.MILLISECONDS));
 	}
 
 	

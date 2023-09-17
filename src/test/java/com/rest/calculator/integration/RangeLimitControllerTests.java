@@ -11,12 +11,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.rest.calculator.exception.InvalitlimitException;
 import com.rest.calculator.services.CalculatorService;
+import com.rest.calculator.services.Constants;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-  class RangeLimitControllerTests {
-	 
-	private static final String expectedMessage = "Please set valid Integer value for UpperLimit between 1 to 100";
+  class RangeLimitControllerTests {	 
+ 
 
 	@Autowired
 	CalculatorService service;
@@ -37,13 +37,20 @@ import com.rest.calculator.services.CalculatorService;
 		mockMvc.perform(MockMvcRequestBuilders.post("/setupperlimit/-1"))
 		.andExpect(MockMvcResultMatchers.status().isBadRequest())
 		.andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof InvalitlimitException))
-		.andExpect(result ->Assertions.assertEquals(expectedMessage,result.getResolvedException().getMessage()));;
+		.andExpect(result ->Assertions.assertEquals(String.format(Constants.PLEASE_ENTER_VALID_INTEGER, Constants.RANGE_LIMIT),result.getResolvedException().getMessage()));;
 	}
 	
 	@Test
 	void test_whenAlphanumericRangeLimitProvided_thenexception() throws Exception
 	{
 		mockMvc.perform(MockMvcRequestBuilders.post("/setupperlimit/random33"))
+		.andExpect(MockMvcResultMatchers.status().isBadRequest());		 
+	}
+	
+	@Test
+	void test_whenBeyondRangeLimitProvided_thenexception() throws Exception
+	{
+		mockMvc.perform(MockMvcRequestBuilders.post("/setupperlimit/1003"))
 		.andExpect(MockMvcResultMatchers.status().isBadRequest());		 
 	}
 	

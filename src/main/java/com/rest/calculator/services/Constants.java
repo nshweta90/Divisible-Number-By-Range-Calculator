@@ -14,5 +14,5 @@ public class Constants {
 
 	public static final String SMALLEST_NUMBER_THAT_CAN_BE_DIVIDED_BY_RANGE = "%s is the smallest number that can be divided by 1 to %s";
 
-	public static final Integer RANGE_LIMIT= 1000;
+	public static final Integer RANGE_LIMIT= 100;
 }
